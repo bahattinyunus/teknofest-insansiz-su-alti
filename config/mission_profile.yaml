@@ -1,0 +1,11 @@
+mission:
+  name: "Operasyon Derin Mavi"
+  target_depth: 5.0  # metre
+  max_runtime: 1200  # saniye
+  tasks:
+    - id: "kapi_gecisi"  # gate_pass
+      priority: "yuksek"
+      timeout: 60
+    - id: "torpido_atis"  # torpedo_fire
+      priority: "kritik"
+      target_color: "kirmizi"

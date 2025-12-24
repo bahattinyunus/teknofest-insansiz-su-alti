@@ -1,0 +1,15 @@
+system:
+  chassis: "Titan-X1 Akrilik Gövde"
+  power: "4S LiPo 5000mAh"
+
+thrusters:
+  layout: "6-eksenli-vektorel"  # 6-dof-vectorized
+  count: 6
+  model: "BlueRobotics T200"
+
+sensors:
+  imu: "BNO055"
+  depth: "Bar30"
+  cameras:
+    front: "Raspberry Pi Kamera V2"
+    bottom: "USB Yüksek Çözünürlüklü Kam"
