@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+v3.13/
+venv/
+.env
+.venv
+env/
+build/
+dist/
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+logs/
+data/raw/
+*.mp4
+*.avi
+README_UTF8.md
+C:/Users/Bahattin Yunus/.gemini/antigravity/brain/

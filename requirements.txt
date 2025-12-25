@@ -1,5 +1,6 @@
-numpy
 opencv-python
+numpy
+rich
 pyyaml
-requests
-matplotlib
+pytest
+flake8
