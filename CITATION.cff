@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Çetin"
+  given-names: "Bahattin Yunus"
+title: "Teknofest İnsansız Sualtı Sistemleri (İSA) - Mavi Vatan Operasyonu"
+version: 1.0.0
+date-released: 2025-12-25
+url: "https://github.com/bahattinyunus/teknofest-insansiz-su-alti"
+abstract: >-
+  Advanced autonomous underwater vehicle (AUV) system architecture 
+  for the Teknofest competition, featuring non-linear control, 
+  acoustic localization, and deep-learning based perception.
+keywords:
+  - AUV
+  - Robotics
+  - Underwater
+  - Teknofest
+  - Autonomous Systems
