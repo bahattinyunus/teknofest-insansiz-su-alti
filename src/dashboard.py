@@ -1,13 +1,35 @@
 import time
 import random
+import sys
 from rich.console import Console
 from rich.layout import Layout
 from rich.panel import Panel
 from rich.live import Live
 from rich.table import Table
 from rich.align import Align
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.syntax import Syntax
 
 console = Console()
+
+def boot_sequence():
+    """Cyberpunk Boot Sequence Animation"""
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[bold cyan]{task.description}"),
+        transient=True,
+    ) as progress:
+        progress.add_task(description="[bold white]INITIALIZING MAVI VATAN KERNEL...[/]", total=100)
+        time.sleep(1)
+        progress.add_task(description="[bold cyan]LOADING NEURAL VISION (YOLO v11)...[/]", total=100)
+        time.sleep(0.8)
+        progress.add_task(description="[bold blue]ESTABLISHING ACOUSTIC LINK...[/]", total=100)
+        time.sleep(0.7)
+        progress.add_task(description="[bold red]FAILSAFE: WATCHDOG ARMED.[/]", total=100)
+        time.sleep(0.5)
+    
+    console.print(Align.center("[bold green]>>> SYSTEM READY: ELITE STATUS ACTIVE <<<[/bold green]"))
+    time.sleep(1)
 
 def make_layout() -> Layout:
     layout = Layout()
@@ -38,16 +60,17 @@ class Header:
         )
 
 def generate_telemetry():
-    table = Table(title="[bold green]📊 SİSTEM TELEMETRİSİ[/bold green]", expand=True)
+    table = Table(title="[bold green]📊 SİSTEM TELEMETRİSİ[/bold green]", expand=True, border_style="green")
     table.add_column("Parametre", style="cyan")
     table.add_column("Değer", style="white")
     table.add_row("Derinlik (m)", f"{random.uniform(2.0, 5.0):.2f}", "[bold green]STABİL[/bold green]")
     table.add_row("Vakum Seviyesi", "0.85 bar", "[bold green]GÜVENLİ[/bold green]")
     table.add_row("Sıcaklık (CPU)", f"{random.randint(45, 55)}°C", "[bold yellow]NOMİNAL[/bold yellow]")
+    table.add_row("Drift (m/s)", f"{random.uniform(0.01, 0.05):.3f}", "[bold blue]CORRECTED[/bold blue]")
     return Panel(table, border_style="green")
 
 def generate_checklist():
-    table = Table(title="[bold blue]📋 PRE-FLIGHT CHECKLIST[/bold blue]", expand=True)
+    table = Table(title="[bold blue]📋 PRE-FLIGHT CHECKLIST[/bold blue]", expand=True, border_style="blue")
     table.add_column("Kontrol Noktası", style="white")
     table.add_column("Durum", style="bold green")
     table.add_row("O-Ring Sızdırmazlık", "✅ TAM")
@@ -67,7 +90,7 @@ def generate_failsafe():
 
 def generate_mission():
     states = ["STANDBY", "DIVING", "WAYPOINT_NAV", "OBJECT_DETECTION", "SURFACE"]
-    current_state = random.choice(states)
+    current_state = states[int(time.time() / 2) % len(states)]
     return Panel(
         Align.center(f"[bold magenta]DURUM: {current_state}[/bold magenta]\n"
                      f"[italic white]'{current_state}' Görev Safhası İcra Ediliyor...[/italic white]"),
@@ -76,6 +99,7 @@ def generate_mission():
     )
 
 def main():
+    boot_sequence()
     layout = make_layout()
     layout["header"].update(Header())
     layout["footer"].update(Panel(Align.center("[italic white]Derinliklerin Sessizliğinde Mühendislik Mirası İnşa Ediliyor...[/italic white]")))
@@ -89,7 +113,8 @@ def main():
                 layout["mission"].update(generate_mission())
                 time.sleep(0.2)
         except KeyboardInterrupt:
-            pass
+            console.print("\n[bold red]TERMINATING COMMAND CENTER...[/bold red]")
+            sys.exit()
 
 if __name__ == "__main__":
     main()
