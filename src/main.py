@@ -60,7 +60,9 @@ class MainBrain:
         print("[STATE: OBJECT_DETECTION] YOLO v11 ile Alansal Görev İcrası.")
         target = self.vision.detect_object("Çember")
         if target['detected']:
+            meta = target['metadata']
             print(f"[MISSION] Hedef Tespit Edildi: {target['coordinates']}")
+            print(f"[MISSION] Nesne Tipi: {meta['type']} | Öncelik: {meta['priority']} | Güven: %{target['confidence']*100:.1f}")
         self.state = "SURFACE"
 
     def handle_surface(self):
