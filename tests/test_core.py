@@ -55,3 +55,23 @@ def test_vision_detect():
     if result["detected"]:
         assert len(result["coordinates"]) == 2
         assert result["metadata"]["type"] == "MISSION_GATE"
+
+def test_logger_creation():
+    from src.modules.logger import DataLogger
+    import os
+    logger = DataLogger(log_dir="tests/test_logs")
+    logger.log_state("STANDBY", 0.0, 0.0, False, event="Test Log")
+    assert os.path.exists("tests/test_logs")
+    assert len(logger.session_data) == 1
+    assert logger.session_data[0]["state"] == "STANDBY"
+
+def test_mission_planner_default():
+    from src.modules.mission_planner import MissionPlanner
+    # Var olmayan bir dosya yüklenirse default rotayı getirmeli
+    planner = MissionPlanner(mission_file="invalid_path.json")
+    planner.load_mission()
+    assert len(planner.waypoints) == 2
+    assert planner.waypoints[0]["task"] == "NAVIGATE"
+    wp = planner.get_next_waypoint()
+    assert wp["id"] == 1
+

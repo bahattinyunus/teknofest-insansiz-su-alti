@@ -1,0 +1,1 @@
+{"waypoints": [{"id": 1, "x": 10, "y": 20, "depth": 5.0, "task": "NAVIGATE"}, {"id": 2, "x": 15, "y": 30, "depth": 6.0, "task": "DETECT_GATE"}]}
