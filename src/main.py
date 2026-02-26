@@ -3,6 +3,7 @@ from modules.navigation import NavigationSystem
 from modules.vision import VisionSystem
 from modules.sonar import SonarSystem
 from modules.failsafe import FailsafeSystem
+from modules.communication import CommunicationSystem
 
 class MainBrain:
     def __init__(self):
@@ -11,8 +12,14 @@ class MainBrain:
         self.vision = VisionSystem()
         self.sonar = SonarSystem()
         self.failsafe = FailsafeSystem()
+        self.comms = CommunicationSystem()
         self.state = "STANDBY"
         self.mission_complete = False
+
+        # Telemetri başlangıç değerleri
+        self.current_depth = 0.0
+        self.current_heading = 0.0
+        self.target_locked = False
 
     def state_machine(self):
         while not self.mission_complete:
@@ -24,6 +31,9 @@ class MainBrain:
                 self.state = "SURFACE"
                 self.failsafe.kill_switch()
                 self.failsafe.trigger_drop_weight()
+
+            # Telemetri yayınlama
+            self.comms.send_telemetry(self.state, self.current_depth, self.current_heading, self.target_locked)
 
             if self.state == "STANDBY":
                 self.handle_standby()
@@ -46,13 +56,15 @@ class MainBrain:
 
     def handle_diving(self):
         print("[STATE: DIVING] Dinamik Dalış ve Derinlik Stabilizasyonu Başlatıldı.")
-        self.nav.maintain_depth(5.0)
+        self.current_depth = 5.0
+        self.nav.maintain_depth(self.current_depth)
         time.sleep(2)
         self.state = "WAYPOINT_NAV"
 
     def handle_navigation(self):
         print("[STATE: WAYPOINT_NAV] Ölü Hesaplama (Dead Reckoning) ile Rota Navigasyonu.")
         self.nav.move_to_target(10, 20)
+        self.current_heading = 45.0
         time.sleep(2)
         self.state = "OBJECT_DETECTION"
 
@@ -60,6 +72,7 @@ class MainBrain:
         print("[STATE: OBJECT_DETECTION] YOLO v11 ile Alansal Görev İcrası.")
         target = self.vision.detect_object("Çember")
         if target['detected']:
+            self.target_locked = True
             meta = target['metadata']
             print(f"[MISSION] Hedef Tespit Edildi: {target['coordinates']}")
             print(f"[MISSION] Nesne Tipi: {meta['type']} | Öncelik: {meta['priority']} | Güven: %{target['confidence']*100:.1f}")
@@ -67,6 +80,10 @@ class MainBrain:
 
     def handle_surface(self):
         print("[STATE: SURFACE] Emniyetli Tahliye Protokolü ve Yüzeye Çıkış.")
+        self.current_depth = 0.0
+        self.target_locked = False
+        # Son tahliye telemetrisi
+        self.comms.send_telemetry(self.state, self.current_depth, self.current_heading, self.target_locked)
         self.mission_complete = True
         print("Operasyon Derin Mavi Tamamlandı.")
 
