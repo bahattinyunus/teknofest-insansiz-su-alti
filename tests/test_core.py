@@ -110,3 +110,15 @@ def test_object_tracker_error():
     assert ey == 10 # 250 - 240
     commands = tracker.get_correction_commands((325, 245))
     assert tracker.is_locked is True
+
+def test_kalman_filter_convergence():
+    from src.modules.kalman_filter import KalmanFilter
+    kf = KalmanFilter(measurement_variance=0.1)
+    # Sabit bir değer (5.0) etrafında gürültülü ölçümler verelim
+    measurements = [5.1, 4.9, 5.2, 4.8, 5.0]
+    final_estimate = 0
+    for m in measurements:
+        final_estimate = kf.update(m)
+    
+    # Filtrelenmiş değerin gerçek değere (5.0) yakın olması beklenir
+    assert abs(final_estimate - 5.0) < 0.1

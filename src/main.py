@@ -10,6 +10,7 @@ from modules.diagnostics import DiagnosticsSystem
 from modules.pid_tuner import PIDTuner
 from modules.path_planner import PathPlanner
 from modules.tracker import ObjectTracker
+from modules.kalman_filter import KalmanFilter
 
 class MainBrain:
     def __init__(self):
@@ -32,12 +33,16 @@ class MainBrain:
         # Phase 4: Akıllı Navigasyon & Takip
         self.path_smoother = PathPlanner()
         self.tracker = ObjectTracker()
+
+        # Phase 5: Sensör Füzyonu
+        self.kf_depth = KalmanFilter(measurement_variance=1e-2)
         
         self.state = "STANDBY"
         self.mission_complete = False
 
         # Telemetri başlangıç değerleri
         self.current_depth = 0.0
+        self.filtered_depth = 0.0
         self.current_heading = 0.0
         self.current_pos = (0.0, 0.0)
         self.target_locked = False
@@ -57,16 +62,19 @@ class MainBrain:
                 self.logger.log_state(self.state, self.current_depth, self.current_heading, False, event=f"DIAG_CRITICAL: {details}")
                 self.state = "SURFACE"
 
+            # Sensör Füzyonu: Derinlik verisini filtrele
+            self.filtered_depth = self.kf_depth.update(self.current_depth)
+
             if not integrity_ok:
                 print(msg)
-                self.logger.log_state(self.state, self.current_depth, self.current_heading, False, event=f"FAILSAFE: {msg}")
+                self.logger.log_state(self.state, self.filtered_depth, self.current_heading, False, event=f"FAILSAFE: {msg}")
                 self.state = "SURFACE"
                 self.failsafe.kill_switch()
                 self.failsafe.trigger_drop_weight()
 
             # Telemetri ve Log yayınlama
-            self.comms.send_telemetry(self.state, self.current_depth, self.current_heading, self.target_locked)
-            self.logger.log_state(self.state, self.current_depth, self.current_heading, True, event=self.diag.get_report())
+            self.comms.send_telemetry(self.state, self.filtered_depth, self.current_heading, self.target_locked)
+            self.logger.log_state(self.state, self.filtered_depth, self.current_heading, True, event=self.diag.get_report())
 
             if self.state == "STANDBY":
                 self.handle_standby()
