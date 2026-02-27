@@ -72,8 +72,8 @@ def test_mission_planner_default():
     # Var olmayan bir dosya yüklenirse default rotayı getirmeli
     planner = MissionPlanner(mission_file="invalid_path.json")
     planner.load_mission()
-    assert len(planner.waypoints) == 2
-    assert planner.waypoints[0]["task"] == "NAVIGATE"
+    assert len(planner.waypoints) == 3
+    assert planner.waypoints[0]["task"] == "PIPELINE_INSPECTION"
     wp = planner.get_next_waypoint()
     assert wp["id"] == 1
 
@@ -122,3 +122,19 @@ def test_kalman_filter_convergence():
     
     # Filtrelenmiş değerin gerçek değere (5.0) yakın olması beklenir
     assert abs(final_estimate - 5.0) < 0.1
+
+def test_mini_rov_mission():
+    from src.modules.mini_rov_manager import MiniROVManager
+    rov = MiniROVManager()
+    assert rov.deploy() is True
+    assert rov.scan_pipeline() in ["Kırmızı", "Yeşil", "Mavi"]
+    assert rov.retract() is True
+
+def test_torpedo_fire_logic():
+    from src.modules.torpedo_sys import TorpedoSystem
+    system = TorpedoSystem(capacity=5)
+    for _ in range(5):
+        assert system.fire() is True
+    assert system.fire() is False # Mühimmat bitti
+    system.reload()
+    assert system.remaining == 5
