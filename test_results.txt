@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.2, pluggy-1.6.0
+rootdir: G:\Di­er bilgisayarlar\Diz³st³ Bilgisayar²m\github repolar²m\teknofest-insansiz-su-alti
+plugins: anyio-4.12.1, langsmith-0.6.8
+collected 12 items
+
+tests\test_core.py ......F.....                                          [100%]
+
+================================== FAILURES ===================================
+_______________________________ test_sonar_scan _______________________________
+
+    def test_sonar_scan():
+        sonar = SonarSystem()
+        result = sonar.scan_environment()
+>       assert "depth_clearance" in result
+E       AssertionError: assert 'depth_clearance' in [{'angle': -60, 'distance': 1.912}, {'angle': -50, 'distance': 1.983}, {'angle': -40, 'distance': 2.106}, {'angle': -30, 'distance': 1.954}, {'angle': -20, 'distance': 2.017}, {'angle': -10, 'distance': 1.965}, ...]
+
+tests\test_core.py:45: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[BAÌLATILDI] Sonar Sistemi Ãevrimii (Active Pinging Mode)
+=========================== short test summary info ===========================
+FAILED tests/test_core.py::test_sonar_scan - AssertionError: assert 'depth_cl...
+======================== 1 failed, 11 passed in 3.78s =========================
