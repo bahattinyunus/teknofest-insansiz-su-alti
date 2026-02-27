@@ -93,3 +93,20 @@ def test_pid_tuner_profiles():
     assert params["ki"] == 0.05
     assert tuner.set_profile("AGRESSIVE") is True
     assert tuner.current_profile == "AGRESSIVE"
+
+def test_path_planner_smooth():
+    from src.modules.path_planner import PathPlanner
+    planner = PathPlanner()
+    path = planner.generate_smooth_path((0, 0), (10, 10))
+    assert len(path) == 6
+    assert path[0] == (0.0, 0.0)
+    assert path[-1] == (10.0, 10.0)
+
+def test_object_tracker_error():
+    from src.modules.tracker import ObjectTracker
+    tracker = ObjectTracker(frame_size=(640, 480))
+    ex, ey = tracker.calculate_tracking_error((330, 250))
+    assert ex == 10 # 330 - 320
+    assert ey == 10 # 250 - 240
+    commands = tracker.get_correction_commands((325, 245))
+    assert tracker.is_locked is True
