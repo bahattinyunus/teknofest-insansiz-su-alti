@@ -1,6 +1,0 @@
-opencv-python
-numpy
-rich
-pyyaml
-pytest
-flake8
