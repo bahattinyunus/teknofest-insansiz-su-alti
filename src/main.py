@@ -6,6 +6,8 @@ from modules.failsafe import FailsafeSystem
 from modules.communication import CommunicationSystem
 from modules.logger import DataLogger
 from modules.mission_planner import MissionPlanner
+from modules.diagnostics import DiagnosticsSystem
+from modules.pid_tuner import PIDTuner
 
 class MainBrain:
     def __init__(self):
@@ -20,6 +22,10 @@ class MainBrain:
         self.logger = DataLogger()
         self.planner = MissionPlanner()
         self.planner.load_mission()
+
+        # Phase 3: Diagnostik ve Optimizasyon
+        self.diag = DiagnosticsSystem()
+        self.tuner = PIDTuner()
         
         self.state = "STANDBY"
         self.mission_complete = False
@@ -37,6 +43,13 @@ class MainBrain:
             self.failsafe.watchdog_reset()
             integrity_ok, msg = self.failsafe.check_integrity()
             
+            # Sistem Sağlık Kontrolü (Phase 3)
+            health, details = self.diag.run_check()
+            if health == "CRITICAL":
+                print(f"[ALERT] KRİTİK SİSTEM HATASI: {details}")
+                self.logger.log_state(self.state, self.current_depth, self.current_heading, False, event=f"DIAG_CRITICAL: {details}")
+                self.state = "SURFACE"
+
             if not integrity_ok:
                 print(msg)
                 self.logger.log_state(self.state, self.current_depth, self.current_heading, False, event=f"FAILSAFE: {msg}")
@@ -46,7 +59,7 @@ class MainBrain:
 
             # Telemetri ve Log yayınlama
             self.comms.send_telemetry(self.state, self.current_depth, self.current_heading, self.target_locked)
-            self.logger.log_state(self.state, self.current_depth, self.current_heading, True)
+            self.logger.log_state(self.state, self.current_depth, self.current_heading, True, event=self.diag.get_report())
 
             if self.state == "STANDBY":
                 self.handle_standby()
@@ -83,6 +96,10 @@ class MainBrain:
     def handle_navigation(self):
         print("[STATE: WAYPOINT_NAV] Ötonom Görev Yöneticisine Devrediliyor.")
         
+        # Hassas navigasyon için PID profilini güncelle (Phase 3)
+        params = self.tuner.get_params("PRECISION")
+        self.nav.update_pid_params(**params)
+
         # Mission Planner üzerinden tüm route'u gez
         while True:
             wp = self.planner.get_next_waypoint()

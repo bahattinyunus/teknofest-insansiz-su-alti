@@ -33,3 +33,9 @@ class NavigationSystem:
         time.sleep(1)
         print(f"[NAV] Konum Doğrulandı. Varyans: 0.05m.")
         return True
+    def update_pid_params(self, kp, ki, kd):
+        """ PID katsayılarını dinamik olarak günceller. """
+        self.kp = kp
+        self.ki = ki
+        self.kd = kd
+        print(f"[NAV] PID Katsayıları Güncellendi -> Kp: {kp}, Ki: {ki}, Kd: {kd}")

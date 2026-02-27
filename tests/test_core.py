@@ -42,8 +42,10 @@ def test_communication_send_telemetry():
 def test_sonar_scan():
     sonar = SonarSystem()
     result = sonar.scan_environment()
-    assert "depth_clearance" in result
-    assert "obstacles" in result
+    assert isinstance(result, list)
+    assert len(result) > 0
+    assert "angle" in result[0]
+    assert "distance" in result[0]
 
 def test_vision_detect():
     import random
@@ -75,3 +77,19 @@ def test_mission_planner_default():
     wp = planner.get_next_waypoint()
     assert wp["id"] == 1
 
+def test_diagnostics_report():
+    from src.modules.diagnostics import DiagnosticsSystem
+    diag = DiagnosticsSystem()
+    status, details = diag.run_check()
+    assert status in ["HEALTHY", "WARNING", "CRITICAL"]
+    assert "battery" in details
+    assert "sensors" in details
+
+def test_pid_tuner_profiles():
+    from src.modules.pid_tuner import PIDTuner
+    tuner = PIDTuner()
+    params = tuner.get_params("PRECISION")
+    assert params["kp"] == 0.5
+    assert params["ki"] == 0.05
+    assert tuner.set_profile("AGRESSIVE") is True
+    assert tuner.current_profile == "AGRESSIVE"
