@@ -33,11 +33,64 @@ Bu döküman, **Mavi Vatan** projesinin dünyadaki en başarılı AUV ekipleri (
 
 ---
 
+## 🌊 Küresel Açık Kaynak Repo Kütüphanesi (Mega Link List)
+
+Aşağıda, dünyadaki en başarılı AUV takımlarının ve yarışma otoritelerinin paylaştığı kaynak kodlar listelenmiştir. Bu kütüphane, **Mavi Vatan** projesinin küresel standartları nasıl takip ettiğinin bir kanıtıdır.
+
+### 🇺🇸 RoboSub Şampiyonları & Devler
+- **Cornell University (CUAUV):** 
+  - [Ana Yazılım Yığını (Open Source)](https://github.com/cuauv/software)
+  - [Scylla & Orion Modülleri](https://github.com/cuauv)
+- **National University of Singapore (Bumblebee):**
+  - [Bumblebee Autonomous Systems Organization](https://github.com/Bumblebee-Autonomous-Systems)
+  - [ROS DevContainer & Simulation](https://github.com/Bumblebee-Autonomous-Systems/ros-devcontainer)
+- **Duke Robotics:**
+  - [RoboSub-ROS (Legacy)](https://github.com/DukeRobotics/robosub-ros)
+  - [RoboSub-ROS 2 (Next Gen)](https://github.com/DukeRobotics/robosub-ros2)
+- **UC Berkeley:**
+  - [Berkeley AUV (RoboSub WS)](https://github.com/berkeleyauv/robosub_ws)
+- **MIT ORCA:**
+  - [Project ORCA Historical Code](https://github.com/topics/orca-auv)
+- **University of Florida (UF-MIL):**
+  - [MIL Monorepo (AUV & Projeler)](https://github.com/uf-mil/mil)
+- **Ohio State University (OSU-UWRT):**
+  - [Riptide Setup & Navigation](https://github.com/osu-uwrt/riptide_setup)
+- **University of Southern Florida (USC):**
+  - [Barracuda Control System](https://github.com/usc-robosub/barracuda-control)
+  - [Barracuda Vision Pipeline](https://github.com/usc-robosub/barracuda-vision)
+
+### 🇸🇬 SAUVC (Singapore AUV Challenge) Kaynakları
+- **SAUVC Official:**
+  - [SAUVC Organization (Tüm Yıllar)](https://github.com/sauvc)
+  - [Rulebooks & Technical Docs](https://github.com/sauvc/rulebook)
+- **Team Hydronautics (BMSTU):**
+  - [Stingray Framework (AUV Core)](https://github.com/hydronautics-team/stingray)
+  - [SAUVC Specific Implementation](https://github.com/hydronautics-team/sauvc)
+- **SAUVC Simulators:**
+  - [Adnan Sabbir - CV Simulator](https://github.com/adnansabbir/SAUVC-Simulator)
+  - [AUV Society - Gazebo Simulations](https://github.com/auvsociety/sauvc-simulations)
+
+### 🇪🇺 Avrupa & Diğer Global Projeler
+- **Vortex NTNU (Norveç):**
+  - [Vortex AUV Guidance & Control](https://github.com/vortexntnu/vortex-auv)
+  - [AUV Simulator Extension](https://github.com/vortexntnu/vortex-auv-simulator)
+- **BYU AUVSI:**
+  - [Metis Path Planning](https://github.com/byu-auvsi/metis)
+  - [Theseus Navigation Algorithms](https://github.com/byu-auvsi/theseus)
+- **Team Inspiration:**
+  - [2024 RoboSub Open Source](https://github.com/InspirationRobotics/inspiration_robosub)
+  - [2025 Graph-Based Planner](https://github.com/InspirationRobotics/robosub_2025)
+
+---
+
+---
+
 ## 🚩 Mavi Vatan'ın Stratejik Avantajları
 
 1. **Şartnameye Tam Adaptasyon:** Rakipler genel RoboSub kurallarına odaklanırken, Mavi Vatan **TEKNOFEST 2026** temalarına (Mini ROV, Torpido Atışı, Koordinat Nav.) doğrudan entegre edilmiştir.
 2. **Hafifletilmiş Mimari:** Dünya devleri 25-50 kg bandında araçlar üretirken, Mavi Vatan **11.5 kg** ağırlığı ile mobilite ve puanlama (Weight Bonus) avantajına sahiptir.
 3. **Akademik Hazırlık:** Rakiplerin çoğunda bulunmayan detaylı `MATH_MODELS.md` dökümantasyonu ile sistemin matematiksel temeli şeffaf bir şekilde sunulmuştur.
+4. **Hibrit Teknoloji:** Geleneksel PID kontrolü ile modern Yapay Zeka (YOLOv11) ve Bezier eğrilerini harmanlayan "Yalın ve Güçlü" bir mimariye sahiptir.
 
 ---
 
