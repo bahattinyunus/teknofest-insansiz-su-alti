@@ -1,0 +1,45 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\bahat\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: G:\Di­er bilgisayarlar\Diz³st³ Bilgisayar²m\github repolar²m\teknofest-insansiz-su-alti
+plugins: anyio-4.12.1, langsmith-0.6.8
+collecting ... collected 17 items
+
+tests/test_core.py::test_failsafe_integrity PASSED                       [  5%]
+tests/test_core.py::test_failsafe_leak_detection PASSED                  [ 11%]
+tests/test_core.py::test_navigation_depth PASSED                         [ 17%]
+tests/test_core.py::test_navigation_movement PASSED                      [ 23%]
+tests/test_core.py::test_communication_initialization PASSED             [ 29%]
+tests/test_core.py::test_communication_send_telemetry PASSED             [ 35%]
+tests/test_core.py::test_sonar_scan PASSED                               [ 41%]
+tests/test_core.py::test_vision_detect PASSED                            [ 47%]
+tests/test_core.py::test_logger_creation PASSED                          [ 52%]
+tests/test_core.py::test_mission_planner_default FAILED                  [ 58%]
+tests/test_core.py::test_diagnostics_report PASSED                       [ 64%]
+tests/test_core.py::test_pid_tuner_profiles PASSED                       [ 70%]
+tests/test_core.py::test_path_planner_smooth PASSED                      [ 76%]
+tests/test_core.py::test_object_tracker_error PASSED                     [ 82%]
+tests/test_core.py::test_kalman_filter_convergence PASSED                [ 88%]
+tests/test_core.py::test_mini_rov_mission PASSED                         [ 94%]
+tests/test_core.py::test_torpedo_fire_logic PASSED                       [100%]
+
+================================== FAILURES ===================================
+________________________ test_mission_planner_default _________________________
+
+    def test_mission_planner_default():
+        from src.modules.mission_planner import MissionPlanner
+        # Var olmayan bir dosya y³klenirse default rotay² getirmeli
+        planner = MissionPlanner(mission_file="invalid_path.json")
+        planner.load_mission()
+>       assert len(planner.waypoints) == 2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = len({'waypoints': [{'depth': 5.0, 'id': 1, 'task': 'NAVIGATE', 'x': 10, ...}, {'depth': 6.0, 'id': 2, 'task': 'DETECT_GATE', 'x': 15, ...}]})
+E        +    where {'waypoints': [{'depth': 5.0, 'id': 1, 'task': 'NAVIGATE', 'x': 10, ...}, {'depth': 6.0, 'id': 2, 'task': 'DETECT_GATE', 'x': 15, ...}]} = <src.modules.mission_planner.MissionPlanner object at 0x00000195EC16A410>.waypoints
+
+tests\test_core.py:75: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PLANNER] G÷rev Planlay²c² Mod³l³ Ba■lat²ld².
+[PLANNER] G÷rev dosyas² y³klendi: 1 hedef.
+=========================== short test summary info ===========================
+FAILED tests/test_core.py::test_mission_planner_default - AssertionError: ass...
+======================== 1 failed, 16 passed in 3.82s =========================

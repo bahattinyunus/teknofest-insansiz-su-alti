@@ -1,0 +1,14 @@
+{
+    "flight_session": [
+        {
+            "timestamp": "2026-02-27T17:44:29.852325",
+            "state": "STANDBY",
+            "telemetry": {
+                "depth": 0.0,
+                "heading": 0.0
+            },
+            "mission_status": "COMPLETED",
+            "event": "Test Log"
+        }
+    ]
+}
