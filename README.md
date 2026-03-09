@@ -27,6 +27,25 @@ Mini ROV operasyonu, mekanik tasarım ve kontrol yazılımı açısından bir "s
   - Ana araca takılan bir kablo sarım motoru (spooling mechanism) ile kordon gerginliği pasif veya aktif kontrol edilmeli, aksi takdirde ana aracın motorlarına kablo dolanma tehlikesi ortaya çıkar.
 - **Rol Değişimi ve Otonomi Sinerjisi:** Mini ROV serbest bırakılırken Mavi Vatan'ın merkezi `MainBrain` ünitesi "Sabit Konum (Station Keeping)" durumuna geçmelidir; Mini ROV görevini yaparken, ana araç sadece stabilizasyonu ve tether pay verme işlemini halleder.
 
+### ⚙️ Mini ROV Mühendislik ve Operasyonel Mimarisi (Mavi Vatan Yaklaşımı)
+TEKNOFEST şartnamesi ve global yaklaşımlar harmanlandığında, Mavi Vatan ekibinin Mini ROV yaklaşımı aşağıdaki üç temel prensibe dayanmaktadır:
+
+1. **Adım Adım Operasyonel Senaryo:**
+   - **Hedefe Varış ve Sabitleme:** Ana AUV boru hattı/dar alan girişine ulaşır ve `Station Keeping` (Sabit Konum) moduna geçerek akıntılara karşı PID ile kendini kilitler.
+   - **Konuşlanma (Deployment):** Manyetik kilit (Magnetic Latch) açılarak Mini ROV serbest kalır.
+   - **İntikal ve İnceleme:** Mini ROV, entegre LED ve omuz kamerası ile boru içine girerek tarama yapar. Olası sızıntıları/hedefleri kaydeder.
+   - **Kurtarma (Recovery):** Görev bitiminde ana araçtaki sarım motoru (Spooling Motor) tether'ı geri çekerek Mini ROV'u yuvaya başarıyla yeniden kenetler (Docking).
+
+2. **Mini ROV Tasarım Kriterleri:**
+   - **Mikro Form Faktörü:** Ana AUV'nin (11.5 kg) hidrodinamik dengesini (Center of Buoyancy / Center of Mass) bozmamak adına Mini ROV'un kütlesi **< 1.5 kg** olarak hedeflenmiştir.
+   - **Vektörel İtki Sistemi (Propulsion):** Boru içi dar alan manevraları için 3 veya 4 eksenli mikro motor (Thruster) konfigürasyonu.
+   - **Minimal Sensör Yükü:** Sadece mikro bir barometrik basınç sensörü (Derinlik) ve düşük ışık kapasiteli 1080p mikroskop/board kamera.
+
+3. **Master-Slave Yazılım Mimarisi ("Aptal Terminal" Yaklaşımı):**
+   - Mini ROV üzerinde ağır bir işlemci (Raspberry Pi vs.) **bulundurulmaz**. Boyutu ve güç tüketimini küçültmek için sadece bir mikrokontrolcü (Pico/STM32 vb.) yer alır (`MiniBrain`).
+   - Ana araçtaki Jetson Orin (`MainBrain`), Master olarak görev yapar. `MiniBrain` ise Slave olarak sadece motorlara PWM sinyali yollar ve sensör verilerini yukarı iletir.
+   - **Görüntü İşleme Aktarımı:** Mini ROV'un kamerası, ham görüntüyü UDP/RTSP akışı ile tether üzerinden direkt olarak ana araca iletir. Nesne tespiti, çatlak bulma, YOLO işlemleri ve seyrüsefer kararlarının tamamı güçlü **Jetson Orin** tarafından yorumlanıp Mini ROV'a sadece "İleri git, Dur" gibi basit RS485 kumandaları gönderilir.
+
 ### 📓 Gerekli Kaynaklar ve İleri Düzey İpuçları
 Bu zorlu görevin otonomi ve kontrol mekanizmalarını donanıma geçirmek için şu referanslar faydalıdır:
 - **Tether Management Algoritmaları:** BlueRobotics Fathom Spool gibi mekanizmaların gerginlik optimizasyonu.
